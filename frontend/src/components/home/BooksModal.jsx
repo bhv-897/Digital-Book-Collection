@@ -1,33 +1,70 @@
 import { AiOutlineClose } from "react-icons/ai"
-import { PiBookLight } from "react-icons/pi"
+import { PiBookOpenTextFill } from "react-icons/pi"
 import { BiUserCircle } from "react-icons/bi"
+import { motion, AnimatePresence } from "framer-motion"
 
 const BooksModal = ({book, onClose}) => {
   return (
-    <div  className="fixed bg-black bg-opacity-60 top-0 left-0 right-0 bottom-0 z-50 flex justify-center items-center " onClick={onClose}>
-      <div className="w-[600px] max-w-full h-[400px] bg-white rounded-xl p-4 " onClick={(e) => e.stopPropagation()}> 
-        <AiOutlineClose className="text-3xl text-red-500  top-6 left-6 cursor-pointer" onClick={onClose}/>
-        <div className="flex flex-col justify-center items-center gap-x-4">
-          <div className="flex w-full justify-center items-center gap-x-4">
-          <PiBookLight className="text-6xl text-blue-500"/>
-          <h1 className="text-2xl font-bold"> Book Details</h1>
-          </div>
+    <AnimatePresence>
+      <div className="fixed bg-black/60 backdrop-blur-sm inset-0 z-50 flex justify-center items-center py-8 px-4" onClick={onClose}>
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          className="relative w-full max-w-xl bg-gray-900 border border-gray-700/50 rounded-2xl shadow-2xl p-8 overflow-hidden" 
+          onClick={(e) => e.stopPropagation()}
+        > 
+          <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
+          
+          <button 
+            onClick={onClose}
+            className="absolute top-6 right-6 text-gray-400 hover:text-white hover:bg-gray-800 p-2 rounded-full transition-all"
+          >
+             <AiOutlineClose className="text-xl" />
+          </button>
 
-          <div className="flex flex-col justify-center items-start gap-x-4 relative">
-            <div className="flex justify-start gap-x-4 text-xl">
-            <span className="font-bold text-xl">Title:</span> {book.title}
+          <div className="flex flex-col gap-y-6">
+            <span className="self-start px-3 py-1 text-xs font-semibold text-indigo-300 bg-indigo-900/40 rounded-full border border-indigo-700/50">
+              {book.publishedYear}
+            </span>
+            
+            <div className="flex items-start gap-x-4">
+              <PiBookOpenTextFill className="text-4xl text-indigo-400 shrink-0 mt-1"/>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-100 leading-tight"> {book.title}</h1>
+                <p className="text-sm font-mono text-gray-500 mt-2">ID: {book._id}</p>
               </div>
-            <div className="text-xl"> <span className="text-xl text-black font-bold">Description: 
-            </span>This Book prepared for both beginners and advance level programmer to guidline how to use 
-              all basic things like syntax, functions, conditional rendering</div>
-            <div className="flex text-2xl mt-6">
-              <BiUserCircle className="text-4xl text-blue-500"/> 
-              <span>  {book.author} 
-                </span></div>
+            </div>
+
+            <div className="mt-4 pt-6 border-t border-gray-800">
+               <h3 className="text-lg font-semibold text-gray-300 mb-2">Description</h3>
+               <p className="text-gray-400 leading-relaxed">
+                 An elegant piece of literature authored by {book.author} in {book.publishedYear}. 
+                 This book is a highly recommended read for anyone wanting to delve deep into the subject matter.
+               </p>
+            </div>
+
+            <div className="flex items-center justify-between mt-6 pt-6 border-t border-gray-800">
+              <div className="flex items-center gap-x-3">
+                <div className="p-3 bg-purple-500/20 rounded-full">
+                  <BiUserCircle className="text-2xl text-purple-400"/> 
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Author</span>
+                  <span className="text-gray-200 font-medium">{book.author}</span>
+                </div>
+              </div>
+
+              <div className="flex flex-col items-end">
+                <span className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Price</span>
+                <span className="text-xl font-bold flex items-center justify-center bg-gray-800/80 w-[4rem] text-emerald-400 rounded-lg">${book.price ? book.price : ' -'}</span>
+              </div>
+            </div>
+            
           </div>
-          </div>
+        </motion.div>
       </div>
-    </div>
+    </AnimatePresence>
   )
 }
 

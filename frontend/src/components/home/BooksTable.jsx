@@ -1,45 +1,79 @@
-import { Link } from 'react-router-dom'
-import { AiOutlineEdit } from 'react-icons/ai'
-import {BsInfoCircle} from 'react-icons/bs'
-import { MdOutlineAddBox, MdOutlineDelete } from 'react-icons/md'
-const BooksTable = ({books}) => {
+import { Link } from 'react-router-dom';
+import { AiOutlineEdit } from 'react-icons/ai';
+import { BsInfoCircle } from 'react-icons/bs';
+import { MdOutlineDelete } from 'react-icons/md';
+import { motion } from 'framer-motion';
+
+const BooksTable = ({ books }) => {
   return (
-    <table className='w-full border-separate border-spacing-2'>
-    <thead >
-      <tr>
-        <th className='border border-slate-600 rounded-md'>No</th>
-        <th className='border border-slate-600 rounded-md'>Title</th>
-        <th className='border border-slate-600 rounded-md max-md:hidden'>Author</th>
-        <th className='border border-slate-600 rounded-md max-md:hidden'>Publish Year</th>
-        <th className='border border-slate-600 rounded-md max-md:hidden'>Price</th>
-        <th className='border border-slate-600 rounded-md '>Operations</th>
-      </tr>
-    </thead>
-    <tbody>
-      {books.map((book, index) => (
-        <tr key={book._id} className='h-8'>
-          <td className='border border-slate-700 rounded-md text-center'>{index + 1}</td>
-          <td className='text-xl border border-slate-600 rounded-md text-center'>{book.title}</td>
-          <td className='text-xl border border-slate-700 rounded-md max-md:hidden text-center'>{book.author}</td>
-          <td className='border border-slate-700 rounded-md max-md:hidden text-center text-xl'>{book.publishedYear}</td>
-          <td className='border border-slate-700 text-center rounded-md max-md:hidden text-xl'>${book.price}</td>
-          <td className='border border-slate-700 rounded-md '>
-            <div className="flex justify-around gap-x-4 ">
-              <Link to={`/books/edit/${book._id}`}>
-                <AiOutlineEdit  className='text-sky-800 text-4xl'/>
-              </Link>
-              <Link to={`/books/delete/${book._id}`}>
-                <MdOutlineDelete  className='text-red-500 text-4xl'/>
-              </Link>
-            <Link to={`/books/show/${book._id}`}>
-              <BsInfoCircle  className='text-sky-800 text-3xl'/>
-            </Link>
-            </div>
-          </td>
-        </tr>))}
-    </tbody>
-  </table>
-  )
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="overflow-x-auto rounded-2xl border border-gray-700/50 bg-gray-800/20 backdrop-blur-sm shadow-xl"
+    >
+      <table className='w-full text-left border-collapse'>
+        <thead>
+          <tr className='bg-gray-800/80 text-gray-400 text-sm tracking-wider uppercase border-b border-gray-700/50'>
+            <th className='p-5 font-medium'>No</th>
+            <th className='p-5 font-medium'>Title</th>
+            <th className='p-5 font-medium max-md:hidden'>Author</th>
+            <th className='p-5 font-medium max-md:hidden'>Publish Year</th>
+            <th className='p-5 font-medium max-md:hidden'>Price</th>
+            <th className='p-5 font-medium text-center'>Actions</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-700/50">
+          {books.map((book, index) => (
+            <motion.tr 
+              key={book._id}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: index * 0.05 }}
+              whileHover={{ backgroundColor: 'rgba(99, 102, 241, 0.05)' }}
+              className='group transition-colors'
+            >
+              <td className='p-5 text-gray-500 font-mono'>{index + 1}</td>
+              <td className='p-5 text-gray-100 font-medium'>{book.title}</td>
+              <td className='p-5 text-gray-400 max-md:hidden'>{book.author}</td>
+              <td className='p-5 max-md:hidden'>
+                <span className="px-3 py-1 text-xs font-semibold text-indigo-300 bg-indigo-900/40 rounded-full border border-indigo-700/50">
+                  {book.publishedYear}
+                </span>
+              </td>
+              <td className='p-5 text-emerald-400 font-medium max-md:hidden'>
+                ${book.price ? book.price : 'N/A'}
+              </td>
+              <td className='p-5'>
+                <div className="flex justify-center items-center gap-x-4">
+                  <Link 
+                    to={`/books/show/${book._id}`}
+                    className="p-2 rounded-lg text-blue-400 hover:bg-blue-500/20 hover:text-white transition-all shadow-sm"
+                    title="View Details"
+                  >
+                    <BsInfoCircle className='text-xl'/>
+                  </Link>
+                  <Link 
+                    to={`/books/edit/${book._id}`}
+                    className="p-2 rounded-lg text-emerald-400 hover:bg-emerald-500/20 hover:text-white transition-all shadow-sm"
+                    title="Edit Book"
+                  >
+                    <AiOutlineEdit className='text-xl'/>
+                  </Link>
+                  <Link 
+                    to={`/books/delete/${book._id}`}
+                    className="p-2 rounded-lg text-rose-400 hover:bg-rose-500/20 hover:text-white transition-all shadow-sm"
+                    title="Delete Book"
+                  >
+                    <MdOutlineDelete className='text-xl'/>
+                  </Link>
+                </div>
+              </td>
+            </motion.tr>
+          ))}
+        </tbody>
+      </table>
+    </motion.div>
+  );
 }
 
-export default BooksTable
+export default BooksTable;
